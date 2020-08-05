@@ -1,2 +1,2 @@
-import SelectLocation from "./lib/selectLocation/SelectLocation.vue";
+import SelectLocation from "./lib/SelectLocation.vue";
 export default SelectLocation;

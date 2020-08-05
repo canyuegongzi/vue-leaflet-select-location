@@ -5,8 +5,7 @@
 
 <script lang="ts">
 import { Component, Vue, Watch } from "vue-property-decorator";
-import SelectLocation from "../../lib/selectLocation/index";
-// import SelectLocation from "../../lib/selectLocation";
+import SelectLocation from "vue-leaflet-location-select";
 
 @Component({
     components: {
