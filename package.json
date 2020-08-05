@@ -1,20 +1,19 @@
 {
   "name": "vue-leaflet-location-select",
   "version": "0.1.0",
-  "private": true,
+  "main": "library/vueLeafletLocationSelect.min.js",
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint"
+    "lint": "vue-cli-service lint",
+    "build:vueLeafletLocationSelect": "webpack --config ./library_build.config.js --mode production"
   },
   "dependencies": {
     "coordtransform": "^2.1.2",
     "core-js": "^3.6.5",
     "element-ui": "^2.13.2",
     "vue": "^2.6.11",
-    "vue-class-component": "^7.2.3",
     "vue-jsonp": "^0.1.8",
-    "vue-property-decorator": "^8.4.2",
     "vue-router": "^3.2.0"
   },
   "devDependencies": {
@@ -28,9 +27,17 @@
     "babel-plugin-component": "^1.1.1",
     "pug-html-loader": "^1.1.5",
     "pug-plain-loader": "^1.0.0",
-    "stylus": "^0.54.7",
+    "style-loader": "^1.2.1",
+    "stylus": "^0.54.8",
     "stylus-loader": "^3.0.2",
+    "terser-webpack-plugin": "^4.0.0",
+    "ts-loader": "^8.0.2",
     "typescript": "~3.9.3",
-    "vue-template-compiler": "^2.6.11"
+    "uglifyjs-webpack-plugin": "^2.2.0",
+    "vue-class-component": "^7.2.3",
+    "vue-property-decorator": "^8.4.2",
+    "vue-template-compiler": "^2.6.11",
+    "webpack-bundle-analyzer": "^3.8.0",
+    "webpack-cli": "^3.3.12"
   }
 }

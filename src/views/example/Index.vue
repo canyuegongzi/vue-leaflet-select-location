@@ -1,10 +1,12 @@
 <template lang="pug">
-    p 定位组件示例
+    div 定位组件示例
+        SelectLocation()
 </template>
 
 <script lang="ts">
 import { Component, Vue, Watch } from "vue-property-decorator";
-import { SelectLocation } from "../../components/selectLocation";
+import SelectLocation from "../../lib/selectLocation/index";
+// import SelectLocation from "../../lib/selectLocation";
 
 @Component({
     components: {

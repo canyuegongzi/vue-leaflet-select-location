@@ -1,2 +1,2 @@
 import SelectLocation from './SelectLocation.vue';
-export {SelectLocation};
+export default SelectLocation;
