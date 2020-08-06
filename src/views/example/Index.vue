@@ -1,17 +1,14 @@
 <template lang="pug">
-    div 定位组件示例
-        SelectLocation()
+    div()
+        p vue-leaflet-location-select
 </template>
 
 <script lang="ts">
 import { Component, Vue, Watch } from "vue-property-decorator";
 import SelectLocation from "vue-leaflet-location-select";
+// import SelectLocation from "../../lib/selectLocation";
+// import { SelectLocation } from "../../packages";
 
-@Component({
-    components: {
-        SelectLocation,
-    },
-})
 export default class Index extends Vue {
     private mapCenter: Array<string | number> = [];
     private N: number | string = ''; // 纬度(显示值)

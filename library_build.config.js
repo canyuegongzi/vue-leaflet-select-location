@@ -6,16 +6,16 @@ const VueLoaderPlugin = require('vue-loader/lib/plugin');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 module.exports = {
     mode: 'production ',
-    entry: "./src/lib/selectLocation/index.ts",
+    entry: "./src/packages/index.js",
     output: {
         path: path.resolve(__dirname, './library'),
-        filename: "vueLeafletLocationSelect.min.js"
+        filename: "vueLeafletLocationSelect.min.js",
+        publicPath: '/library/',
+        library: 'vue-leaflet-location-select', // 指定的就是使用 import 时的模块名
+        libraryTarget: 'umd', // libraryTarget会生成不同umd的代码,可以只是commonjs标准的，也可以是指amd标准的，也可以只是通过script标签引入的
+        umdNamedDefine: true // 会对 UMD 的构建过程中的 AMD 模块进行命名。否则就使用匿名的 define
     },
-    externals: {
-        'vue': 'Vue',
-        'vue-router': 'VueRouter',
-        'element-ui': 'ElementUI',
-    },
+    externals: {},
     optimization: {
         minimizer: [
             new UglifyJSPlugin(),
@@ -43,19 +43,25 @@ module.exports = {
     devtool: '#eval-source-map',
     module: {
         rules: [
-            {
+            { // 添加tsloader
                 test: /\.tsx?$/,
                 loader: 'ts-loader',
                 exclude: /node_modules/,
+                options: {
+                    appendTsSuffixTo: [/\.vue$/],
+                }
+            },
+            {
+                test: /\.js$/,
+                exclude: /node_modules/,
+                loader: "babel-loader",
             },
             {
                 test: /\.vue$/,
                 loader: 'vue-loader'
             },
             {
-                test: /\.js$/,
-                exclude: /node_modules/,
-                loader: "babel-loader",
+                test: /\.pug$/, use: ['pug-plain-loader'] 
             },
             {
                 test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,

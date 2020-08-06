@@ -1,8 +1,10 @@
 import Vue from 'vue';
 import App from './App.vue';
 import router from './router';
-import { Button } from 'element-ui';
-Vue.use(Button);
+import ElementUI from 'element-ui';
+Vue.use(ElementUI);
+import 'element-ui/lib/theme-chalk/index.css';
+Vue.prototype.$ELEMENT = { size: 'mini' }
 Vue.config.productionTip = false;
 
 new Vue({
