@@ -11,9 +11,11 @@
   "dependencies": {
     "coordtransform": "^2.1.2",
     "core-js": "^3.6.5",
+    "el-tree-transfer": "^2.3.0",
     "element-ui": "^2.13.2",
     "vue": "^2.6.11",
     "vue-jsonp": "^0.1.8",
+    "vue-leaflet-location-select": "^0.1.2",
     "vue-router": "^3.2.0"
   },
   "devDependencies": {

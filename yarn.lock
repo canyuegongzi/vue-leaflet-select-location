@@ -3253,6 +3253,11 @@ ejs@^2.6.1:
   resolved "https://registry.yarnpkg.com/ejs/-/ejs-2.7.4.tgz#48661287573dcc53e366c7a1ae52c3a120eec9ba"
   integrity sha512-7vmuyh5+kuUyJKePhQfRQBhXV5Ce+RnaeeQArKu1EAMpL3WbgMt5WG6uQZpEVvYSSsxMXRKOewtDk9RaTKXRlA==
 
+el-tree-transfer@^2.3.0:
+  version "2.3.0"
+  resolved "https://registry.yarnpkg.com/el-tree-transfer/-/el-tree-transfer-2.3.0.tgz#deed5813324bd6bd0465fe8d0dc490b23434f5c3"
+  integrity sha512-pLCPa/2yAXxW95YI0vH/SyhdTNX8IJoil6CoIkzvZ07OJ724vTLZrmz0JrABGb6rejPWt9SmP8GBHIN2mge9XQ==
+
 electron-to-chromium@^1.3.488:
   version "1.3.520"
   resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.3.520.tgz#dfda0a14a4aed785cbddfdb505ea122f75978392"
@@ -8256,6 +8261,18 @@ vue-jsonp@^0.1.8:
   version "0.1.8"
   resolved "https://r.cnpmjs.org/vue-jsonp/download/vue-jsonp-0.1.8.tgz#2cec054b0aca5a9c7de0146b16b2acbeec2d73a7"
   integrity sha1-LOwFSwrKWpx94BRrFrKsvuwtc6c=
+
+vue-leaflet-location-select@^0.1.2:
+  version "0.1.2"
+  resolved "https://registry.yarnpkg.com/vue-leaflet-location-select/-/vue-leaflet-location-select-0.1.2.tgz#2aacaa4d188f25a9ee02ae120388ee78ebfaa1cd"
+  integrity sha512-xmDlDV9OKDpRvAqIfrkSIAHAas+8cpdfVGy/+comR+pVaHJ/2msoA5D9oiFEM0tvXExuqb8lNI9KzBRIEK2Akw==
+  dependencies:
+    coordtransform "^2.1.2"
+    core-js "^3.6.5"
+    element-ui "^2.13.2"
+    vue "^2.6.11"
+    vue-jsonp "^0.1.8"
+    vue-router "^3.2.0"
 
 vue-loader@^15.9.2:
   version "15.9.3"
