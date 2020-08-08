@@ -1,20 +1,20 @@
 <style lang="stylus"></style>
 <template lang="pug">
     div
-        p 445555
-        div(style="width: 320px; height: 28px; margin: 0 auto")
-            select-location(v-model="location")
+        p 定位组件
+        div(style="width: 480px; height: 28px; margin: 0 auto")
+            select-location(v-model="location" :width="480" dialogWidth="600px" :toFixedNum="8")
     
 </template>
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
-import SelectLocation from "vue-leaflet-location-select";
-import "vue-leaflet-location-select/library/vue-leaflet-location-select.css";
-// import SelectLocation from "./packages/selectLocation/SelectLocation.vue";
+//import SelectLocation from "vue-leaflet-location-select";
+// import "vue-leaflet-location-select/library/vue-leaflet-location-select.css";
+import SelectLocation from "./packages/selectLocation/SelectLocation.vue";
 @Component({
     components: {
-        'select-location': SelectLocation[0],
-        // 'select-location': SelectLocation,
+        'select-location': SelectLocation,
+        // 'select-location': SelectLocation.SelectLocation,
     },
 })
 export default class App extends Vue {

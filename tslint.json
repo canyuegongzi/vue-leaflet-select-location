@@ -25,6 +25,7 @@
         "jsdoc-format": false,
         "camelcase": false,
         "triple-equals": false,
-        "no-unused-expression": false
+        "no-unused-expression": false,
+        "only-arrow-functions": false
     }
 }

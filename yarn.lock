@@ -8479,6 +8479,20 @@ vue-leaflet-location-select@^0.2.1:
   resolved "https://registry.yarnpkg.com/vue-leaflet-location-select/-/vue-leaflet-location-select-0.2.1.tgz#78606647b9a8b7bc1bf19f18099c8cd3b53f063e"
   integrity sha512-vl/A/bSYvddZKpPMk+/1oWy6N4lh+hbN5FAGuquiL5gXesiSJVhXYCAbGPdoNm4LOlWEJHMkDRfkNkIEeLUDrQ==
 
+vue-leaflet-location-select@^0.2.3:
+  version "0.2.3"
+  resolved "https://registry.npm.taobao.org/vue-leaflet-location-select/download/vue-leaflet-location-select-0.2.3.tgz#3f7535734c5918413b510db547bfacb4b4696c2d"
+  integrity sha1-P3U1c0xZGEE7UQ21R7+stLRpbC0=
+  dependencies:
+    vue-leaflet-location-select "^0.2.1"
+
+vue-leaflet-location-select@^0.2.4:
+  version "0.2.4"
+  resolved "https://registry.npm.taobao.org/vue-leaflet-location-select/download/vue-leaflet-location-select-0.2.4.tgz#aafab92174fe11106be985e16dc85405033d2061"
+  integrity sha1-qvq5IXT+ERBr6YXhbchUBQM9IGE=
+  dependencies:
+    vue-leaflet-location-select "^0.2.3"
+
 vue-loader@^15.9.2, vue-loader@^15.9.3:
   version "15.9.3"
   resolved "https://registry.yarnpkg.com/vue-loader/-/vue-loader-15.9.3.tgz#0de35d9e555d3ed53969516cac5ce25531299dda"

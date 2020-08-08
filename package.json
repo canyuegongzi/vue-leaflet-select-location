@@ -1,9 +1,10 @@
 {
     "name": "vue-leaflet-location-select",
-    "version": "0.2.1",
+    "version": "0.2.5",
     "main": "library/vue-leaflet-location-select.umd.min.js",
     "author": "Marvin",
     "license": "MIT",
+    "description": "an Component of Longitude and latitude of Location based on Vue.js",
     "scripts": {
         "serve": "vue-cli-service serve",
         "build": "vue-cli-service build",
@@ -15,14 +16,22 @@
     "keywords": [
         "javascript",
         "vue",
-        "leaflet"
+        "leaflet",
+        "Longitude and latitude of Location"
     ],
     "files": [
-        "library"
+        "library/vue-leaflet-location-select.umd.min.js",
+        "library/vue-leaflet-location-select.css"
     ],
-    "dependencies": {
-        "vue-leaflet-location-select": "^0.2.1"
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/canyuegongzi/vue-leaflet-select-location.git"
     },
+    "bugs": {
+        "url": "https://github.com/canyuegongzi/vue-leaflet-select-location.git/issues"
+    },
+    "homepage": "https://github.com/canyuegongzi/vue-leaflet-select-location",
+    "dependencies": {},
     "devDependencies": {
         "@babel/plugin-proposal-object-rest-spread": "^7.11.0",
         "@babel/plugin-syntax-dynamic-import": "^7.8.3",

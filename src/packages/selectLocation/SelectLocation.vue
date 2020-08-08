@@ -1,22 +1,22 @@
 <template lang="pug">
     .select-location(ref="selectLocationContainer")
-        el-form(class="select-location-con" v-show="isInput" :model="form" ref="selectLocation")
+        el-form(class="select-location-con" v-if="isInput" :model="form" ref="selectLocation")
             el-form-item(class = "select-longitude" :style="{width: inputStyleWidth + 'px'}" prop="E" :rules='rulesE')
                 el-input(placeholder="请输入经度" style="width: 100%" :disabled="disable" v-model="E" @change='inputChange')
             el-form-item(class="select-latitude" :style="{width: inputStyleWidth + 'px'}" prop="N" :rules='rulesN')
                 el-input( placeholder="请输入纬度" style="width: 100%" :disabled="disable" v-model="N" @change='inputChange')
         i(class="zmdi zmdi-zmdi-pin el-icon-location map-icon " @click="openMapDialog" v-if="!disable")
         .selct-dialog
-            el-dialog(size="mini" :visible.sync="dialogVisible" custom-class='yf_map-dialog-select' :lock-scroll="true" id="mapEditContainer" @close="closeMapSelect" width="600px")
+            el-dialog(size="mini" :visible.sync="dialogVisible" custom-class='yf_map-dialog-select' :lock-scroll="true" id="mapEditContainer" @close="closeMapSelect" :width="dialogWidth")
                 span(slot="title") 请在地图上单击选择坐标点
                 div(:id="mapId" class="map-box")
                     .mapTip
                         .text 经度：{{E1}}
                         .text 纬度：{{N1}}
-                div(class="map-search")
-                    el-input(v-model="searchQuery" placeholder="请输入关键词搜索"  @blur="getLocationQuery"  @keyup.enter.native="getLocationQuery" size="mini" suffix-icon="el-icon-search")
-                div(class="map-search-list")
-                    search-list(:result="positionList")
+                div(class="map-search" style="width: 200px" v-if="componentConfig.isSearch")
+                    el-input(v-model="searchQuery" clearable placeholder="请输入关键词搜索" @blur="searchBlur" @clear="clearAddressList" @keyup.enter.native="searchLocation" size="mini" suffix-icon="el-icon-search")
+                div(class="map-search-list" style="width: 200px")
+                    search-list(:result="positionList" @setLocationItem="setLocationItem" :isNoData="searchIsNoData")
                 span(slot="footer" class="dialog-footer")
                     el-button(@click="cancleFun" size="mini") 取 消
                     el-button(type="primary" @click="okFun" size="mini") 确 定
@@ -24,31 +24,31 @@
 <script lang="ts">
 import "leaflet/dist/leaflet.css";
 import { Vue, Prop, Watch, Emit, Component, Ref } from "vue-property-decorator";
-import L from "leaflet";
-import { MapConfig } from "../type/MapConfig";
-import {jsonpHttp} from '../utils/jsonp';
-import {MapSearchPoisItem} from '../type/MapSearchPoisItem';
+import { MapConfig } from "../types/MapConfig";
+import {debounce, jsonpHttp} from '../utils/utils';
+import {MapSearchPoisItem} from '../types/MapSearchPoisItem';
 import SearchList from '../searchList/SearchList.vue';
+import * as coordtransform from "coordtransform";
+import L from "leaflet";
 @Component({
     components: {SearchList},
     name: "SelectLocation",
 })
 export default class SelectLocation extends Vue {
     @Prop({ default: () => { return new MapConfig(); } }) private mapConfig!: MapConfig;
-    @Prop({ default: () => { return { width: "320px" }; } }) private containerStyle: any;
-    @Prop({ default: () =>  { return { width: "140px"}; } }) private inputStyle: any;
     @Prop({ default: 320 }) private width: number | undefined;
     @Prop({ default: () => { return []; }}) private value!: Array<number | string>;
     @Prop({ default: "map" }) private mapId!: string;
-    @Prop({ default: "locationId" }) private locationId: string | undefined;
+    @Prop({ default: "600px" }) private dialogWidth: string | undefined;
     @Prop({ default: "2" }) private mapType!: number | string;
+    @Prop({ default: 6 }) private toFixedNum!: number;
     @Prop({ default: true }) private isInput: boolean | undefined;
     @Prop({ default: false }) private disable: boolean | undefined;
     @Prop({ default: false }) private isClear: boolean | undefined;
     get form() {
         return {
-            E: this.E ? Number(this.E).toFixed(6) : "",
-            N: this.N ? Number(this.N).toFixed(6) : "",
+            E: this.E ? Number(this.E).toFixed(this.toFixedNum) : "",
+            N: this.N ? Number(this.N).toFixed(this.toFixedNum) : "",
         };
     }
     get inputStyleWidth() {
@@ -73,6 +73,7 @@ export default class SelectLocation extends Vue {
     private E2: number | string | null = ""; // 鼠标滑动值
     private select: number | string = this.mapType; // 1-度分秒；2-度
     private dialogVisible: boolean = false;
+    private searchIsNoData: boolean = false;
     private map: any = null; // 地图
     private marker: any = null; // masker
     private searchQuery: string = ""; // 地图搜索内容
@@ -131,9 +132,16 @@ export default class SelectLocation extends Vue {
         this.initValue(val);
     }
     /**
+     * 无值得默认填充
+     */
+    get nullValueStr() {
+        const zero: number = 0;
+        return zero.toFixed(this.toFixedNum);
+    }
+    /**
      * 组件配置初始化
      */
-    protected initConfig() {
+    protected initConfig(): void {
         this.componentConfig = {
             ...this.componentConfig,
             ...this.mapConfig,
@@ -142,7 +150,7 @@ export default class SelectLocation extends Vue {
     /**
      * 打开弹框
      */
-    protected openMapDialog() {
+    protected openMapDialog(): void | boolean {
         if (this.disable) {
             return false;
         }
@@ -171,24 +179,20 @@ export default class SelectLocation extends Vue {
                         format: "image/png",
                     })
                     .addTo(this.map);
-
-                // 初始化时如果有点位值，设置点位
                 if (this.N1 && this.E1) {
                     this.setMarker();
                     this.map.setView([this.N1, this.E1]);
                 }
                 this.map.on("click", (e: any) => {
-                    this.N1 = e.latlng.lat.toFixed(6);
-                    this.E1 = e.latlng.lng.toFixed(6);
+                    this.N1 = e.latlng.lat.toFixed(this.toFixedNum);
+                    this.E1 = e.latlng.lng.toFixed(this.toFixedNum);
                     this.setMarker();
                 });
                 this.map.on("mousemove", (e: any) => {
-                    // debugger
-                    this.N2 = e.latlng.lat.toFixed(6);
-                    this.E2 = e.latlng.lng.toFixed(6);
+                    this.N2 = e.latlng.lat.toFixed(this.toFixedNum);
+                    this.E2 = e.latlng.lng.toFixed(this.toFixedNum);
                 });
                 this.map.on("zoomend", (e: any) => {
-                    // 获取当前放大或者缩小的等级
                     console.log(e.target.getZoom());
                 });
             }
@@ -201,15 +205,20 @@ export default class SelectLocation extends Vue {
     /**
      * 输入框修改
      */
-    protected inputChange() {
-        const arr: string[] = [Number(this.form.N).toFixed(6), Number(this.form.E).toFixed(6)];
+    protected inputChange(): void {
+        const arr: string[] = [
+            Number(this.form.N).toFixed(this.toFixedNum),
+            Number(this.form.E).toFixed(this.toFixedNum),
+        ];
         this.sync(arr);
     }
     /**
      * 关闭弹框
      */
-    private closeMapSelect() {
+    private closeMapSelect(): void | boolean {
         this.searchQuery = '';
+        this.positionList = [];
+        this.searchIsNoData = false;
         if (this.marker) {
             try {
                 this.map.removeLayer(this.marker);
@@ -225,9 +234,33 @@ export default class SelectLocation extends Vue {
         }
     }
     /**
+     * 节流触发搜索
+     */
+    private searchLocation(): void {
+        if (this.searchQuery) {
+            debounce(this.getLocationQuery, 250)();
+        }
+    }
+    /**
+     * 清空搜索数据
+     */
+    private clearAddressList(): void {
+        this.positionList = [];
+        this.searchIsNoData = false;
+    }
+    /**
+     * 搜索框焦点
+     */
+    private searchBlur(): void {
+        if (!this.searchQuery) {
+            this.positionList = [];
+            this.searchIsNoData = false;
+        }
+    }
+    /**
      * 地图位置搜索
      */
-    private async getLocationQuery() {
+    private async getLocationQuery(): Promise<any> {
         let positionList: MapSearchPoisItem[] = [];
         const res: any = await jsonpHttp(
             this.componentConfig.searchConfigUrl,
@@ -235,17 +268,25 @@ export default class SelectLocation extends Vue {
         if (res.info == 'OK') {
             positionList = res.pois;
         }
-        console.log(positionList);
         this.positionList = positionList;
-        // const res = await this.$jsonp(map.url, { key: map.key, keywords: this.searchQuery, offset: 1 })
-        // if (res.info == 'OK' && res.pois.length > 0){
-        //     const temp = res.pois[0].location.split(',')
-        //     const loacation = await coordtransform.gcj02towgs84(temp[0], temp[1])
-        //     this.N1 = loacation[1].toFixed(6)
-        //     this.E1 = loacation[0].toFixed(6)
-        //     this.setMarker()
-        //     this.map.setView([this.N1 || 30, this.E1 || 120])
-        // }
+        this.searchIsNoData = this.positionList.length === 0;
+    }
+    /**
+     * 定位当前选中的地址
+     */
+    private async setLocationItem(item: MapSearchPoisItem): Promise<any> {
+        if (item.location) {
+             const temp = item.location.split(',');
+             const loacation = await coordtransform.gcj02towgs84(temp[0], temp[1]);
+             this.N1 = loacation[1].toFixed(this.toFixedNum);
+             this.E1 = loacation[0].toFixed(this.toFixedNum);
+             this.setMarker();
+             this.map.setView(
+                 [this.N1 || 30, this.E1 || 120],
+                 12,
+                 { animate: true, duration: 0.25 },
+             );
+        }
     }
     /**
      * 弹框关闭
@@ -271,7 +312,7 @@ export default class SelectLocation extends Vue {
     /**
      * 绘制地图标记
      */
-    private setMarker() {
+    private setMarker(): void | boolean {
         if (!this.marker) {
             this.marker = L.marker([this.N1, this.E1], {
                 icon: new L.icon({
@@ -293,21 +334,6 @@ export default class SelectLocation extends Vue {
                 return true;
             }
         }
-    }
-    /**
-     * 输入框数据转换
-     */
-    private change(val: string): void {
-        if (val === "1") {
-            // 十进制转度分秒
-            this.N = this.floatToStr(this.N);
-            this.E = this.floatToStr(this.E);
-        } else {
-            // 度分秒转十进制
-            this.N = this.strToFloat(this.N);
-            this.E = this.strToFloat(this.E);
-        }
-        this.sync();
     }
     /**
      * 十进制转换度分秒
@@ -352,7 +378,7 @@ export default class SelectLocation extends Vue {
                 }
             }
             ft = du + fen / 60 + miao / 3600;
-            return ft.toFixed(6);
+            return ft.toFixed(this.toFixedNum);
         } else {
             return "";
         }
@@ -363,10 +389,13 @@ export default class SelectLocation extends Vue {
     private mapOnloadView(): void {
         if (this.N1 && this.E1) {
             this.setMarker();
-            this.map.setView([
-                this.N1 || this.componentConfig.mapCenter[0],
-                this.E1 || this.componentConfig.mapCenter[1],
-            ]);
+            this.map.setView(
+                [
+                    this.N1 || this.componentConfig.mapCenter[0],
+                    this.E1 || this.componentConfig.mapCenter[1],
+                ],
+                12,
+                { animate: true, duration: 0.25 });
         } else {
             this.map.setView(
                 [
@@ -384,12 +413,12 @@ export default class SelectLocation extends Vue {
      */
     private initValue(val: string[] | number[]): void {
         if (val && val.length > 1) {
-            this.N = Number(val[0]) ? Number(val[0]) : null;
-            this.E = Number(val[1]) ? Number(val[1]) : null;
-            this.N1 = val[0] ? val[0] : null;
-            this.E1 = val[1] ? val[1] : null;
-            this.N2 = val[0] ? val[0] : null;
-            this.E2 = val[1] ? val[1] : null;
+            this.N = Number(val[0]) ? Number(val[0]).toFixed(this.toFixedNum) : null;
+            this.E = Number(val[1]) ? Number(val[1]).toFixed(this.toFixedNum) : null;
+            this.N1 = val[0] ? (val[0] as number).toFixed(this.toFixedNum) : null;
+            this.E1 = val[1] ? (val[1] as number).toFixed(this.toFixedNum) : null;
+            this.N2 = val[0] ? (val[0] as number).toFixed(this.toFixedNum) : null;
+            this.E2 = val[1] ? (val[1] as number).toFixed(this.toFixedNum) : null;
             this.closeMapSelect();
             this.setMarker();
         } else {
@@ -406,11 +435,11 @@ export default class SelectLocation extends Vue {
      * 位置数据双向绑定
      */
     @Emit('input')
-    private sync(val?: string[]) {
+    private sync(val?: string[]): any[] | undefined {
         if (Array && Array.isArray(val) && val.length === 2) {
             return val;
         }
-        if (this.E != '0.000000' || this.E != '0.000000') {
+        if (this.E != this.nullValueStr || this.N != this.nullValueStr) {
             return [this.N, this.E];
         }
     }
@@ -424,4 +453,5 @@ export default class SelectLocation extends Vue {
     .yf_map-dialog-select
         .el-dialog__body
             padding-top 0
+            padding-bottom 0
 </style>

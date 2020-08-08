@@ -1,4 +1,19 @@
 /**
+ * 函数防抖( => void 无法拿到arguments )
+ */
+export const debounce = function(fn: () => void, t: number = 0) {
+    let timer: number | undefined | null = null;
+    return function() {
+        // @ts-ignore
+        const context: any = this;
+        const args: any = arguments;
+        timer && clearTimeout(timer);
+        timer = setTimeout(function() {
+            fn.apply(context, args);
+        }, t);
+    };
+};
+/**
  * jsonp搜索工具
  * @param url
  * @param params
@@ -25,3 +40,4 @@ export const jsonpHttp = (url, params= {}) => {
         }
     }));
 };
+
