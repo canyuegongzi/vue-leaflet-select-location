@@ -1,24 +1,8 @@
-# vue-leaflet-location-select
-
-## Project setup
-```
-yarn install
-```
-
-### Compiles and hot-reloads for development
-```
-yarn serve
-```
-
-### Compiles and minifies for production
-```
-yarn build
-```
-
-### Lints and fixes files
-```
-yarn lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+## 经纬度选择器
+### 使用
+### props
+### event
+### method
+### slot
+### 版本更迭
+1. 替换父组件修改值，优化为双向绑定

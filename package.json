@@ -1,7 +1,7 @@
 {
     "name": "vue-leaflet-location-select",
-    "version": "0.1.9",
-    "main": "library/vueLeafletLocationSelect.min.js",
+    "version": "0.2.1",
+    "main": "library/vue-leaflet-location-select.umd.min.js",
     "author": "Marvin",
     "license": "MIT",
     "scripts": {
@@ -9,7 +9,8 @@
         "build": "vue-cli-service build",
         "lint": "vue-cli-service lint",
         "build:vueLeafletLocationSelect": "webpack --config ./library_build.config.js --mode production",
-        "build:vueLeafletLocationSelect2": "webpack --config ./library_build.config1.js --mode production"
+        "build:vueLeafletLocationSelect2": "webpack --config ./library_build.config1.js --mode production",
+        "lib": "vue-cli-service build --target lib --name vue-leaflet-location-select --dest library src/packages/index.ts"
     },
     "keywords": [
         "javascript",
@@ -17,10 +18,11 @@
         "leaflet"
     ],
     "files": [
-        "dist",
-        "src/packages"
+        "library"
     ],
-    "dependencies": {},
+    "dependencies": {
+        "vue-leaflet-location-select": "^0.2.1"
+    },
     "devDependencies": {
         "@babel/plugin-proposal-object-rest-spread": "^7.11.0",
         "@babel/plugin-syntax-dynamic-import": "^7.8.3",
@@ -53,7 +55,6 @@
         "vue": "^2.6.11",
         "vue-class-component": "^7.2.3",
         "vue-jsonp": "^0.1.8",
-        "vue-leaflet-location-select": "^0.1.9",
         "vue-loader": "^15.9.3",
         "vue-property-decorator": "^8.4.2",
         "vue-router": "^3.2.0",

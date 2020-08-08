@@ -4,7 +4,7 @@ declare module '*.vue' {
 }
 declare module 'vue-leaflet-location-select' {
     const SelectLocation:any;
-    export default SelectLocation
+    export default SelectLocation;
 }
 declare module 'leaflet';
 declare module 'coordtransform';
