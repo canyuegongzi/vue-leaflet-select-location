@@ -23,7 +23,7 @@
 </template>
 <script lang="ts">
 import "leaflet/dist/leaflet.css";
-import { Vue, Prop, Watch, Emit, Component, Ref } from "vue-property-decorator";
+import { Vue, Prop, Watch, Emit, Component } from "vue-property-decorator";
 import { MapConfig } from "../types/MapConfig";
 import {debounce, jsonpHttp} from '../utils/utils';
 import {MapSearchPoisItem} from '../types/MapSearchPoisItem';
@@ -413,21 +413,16 @@ export default class SelectLocation extends Vue {
      */
     private initValue(val: string[] | number[]): void {
         if (val && val.length > 1) {
-            this.N = Number(val[0]) ? Number(val[0]).toFixed(this.toFixedNum) : null;
-            this.E = Number(val[1]) ? Number(val[1]).toFixed(this.toFixedNum) : null;
-            this.N1 = val[0] ? (val[0] as number).toFixed(this.toFixedNum) : null;
-            this.E1 = val[1] ? (val[1] as number).toFixed(this.toFixedNum) : null;
-            this.N2 = val[0] ? (val[0] as number).toFixed(this.toFixedNum) : null;
-            this.E2 = val[1] ? (val[1] as number).toFixed(this.toFixedNum) : null;
+            console.log(val);
+            const N: string | null = Number(val[0]) ?  Number(val[0]).toFixed(this.toFixedNum) : null;
+            const E: string | null = Number(val[1]) ?  Number(val[1]).toFixed(this.toFixedNum) : null;
+            this.N = this.N1 = this.N2 = N;
+            this.E = this.E1 = this.E2 = E;
             this.closeMapSelect();
             this.setMarker();
         } else {
-            this.N = '';
-            this.E = '';
-            this.N1 = '';
-            this.E1 = '';
-            this.N2 = '';
-            this.E2 = '';
+            this.N = this.N1 = this.N2 = '';
+            this.E = this.E1 = this.E2 = '';
             this.closeMapSelect();
         }
     }

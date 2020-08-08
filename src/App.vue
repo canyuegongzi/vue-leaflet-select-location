@@ -8,9 +8,9 @@
 </template>
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
-//import SelectLocation from "vue-leaflet-location-select";
-// import "vue-leaflet-location-select/library/vue-leaflet-location-select.css";
-import SelectLocation from "./packages/selectLocation/SelectLocation.vue";
+import SelectLocation from "vue-leaflet-location-select";
+import "vue-leaflet-location-select/library/vue-leaflet-location-select.css";
+// import SelectLocation from "./packages/selectLocation/SelectLocation.vue";
 @Component({
     components: {
         'select-location': SelectLocation,
