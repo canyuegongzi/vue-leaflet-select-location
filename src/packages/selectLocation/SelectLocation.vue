@@ -16,7 +16,7 @@
                 div(class="map-search" style="width: 200px" v-if="componentConfig.isSearch")
                     el-input(v-model="searchQuery" clearable placeholder="请输入关键词搜索" @blur="searchBlur" @clear="clearAddressList" @keyup.enter.native="searchLocation" size="mini" suffix-icon="el-icon-search")
                 div(class="map-search-list" style="width: 200px")
-                    search-list(:result="positionList" @setLocationItem="setLocationItem" :isNoData="searchIsNoData")
+                    search-list(:result="positionList" @setLocationItem="setLocationItem" :activeIndex="activeIndex" :isNoData="searchIsNoData")
                 span(slot="footer" class="dialog-footer")
                     el-button(@click="cancleFun" size="mini") 取 消
                     el-button(type="primary" @click="okFun" size="mini") 确 定
@@ -45,6 +45,7 @@ export default class SelectLocation extends Vue {
     @Prop({ default: true }) private isInput: boolean | undefined;
     @Prop({ default: false }) private disable: boolean | undefined;
     @Prop({ default: false }) private isClear: boolean | undefined;
+    private activeIndex: number = -1;
     get form() {
         return {
             E: this.E ? Number(this.E).toFixed(this.toFixedNum) : "",
@@ -137,6 +138,26 @@ export default class SelectLocation extends Vue {
     get nullValueStr() {
         const zero: number = 0;
         return zero.toFixed(this.toFixedNum);
+    }
+    /**
+     * 销毁地图
+     */
+    public destroyMap() {
+        if (this.map) {
+            this.map.remove();
+            this.map = null;
+            this.marker = null;
+            this.N = this.N1 = this.N2 = '';
+            this.E = this.E1 = this.E2 = '';
+            this.sync();
+        }
+    }
+    /**
+     * 清除value
+     */
+    public clearValue() {
+        this.N = this.N1 = this.N2 = '';
+        this.E = this.E1 = this.E2 = '';
     }
     /**
      * 组件配置初始化
@@ -255,6 +276,8 @@ export default class SelectLocation extends Vue {
         if (!this.searchQuery) {
             this.positionList = [];
             this.searchIsNoData = false;
+        } else {
+            this.searchLocation();
         }
     }
     /**
@@ -274,9 +297,10 @@ export default class SelectLocation extends Vue {
     /**
      * 定位当前选中的地址
      */
-    private async setLocationItem(item: MapSearchPoisItem): Promise<any> {
+    private async setLocationItem({ item, index } ): Promise<any> {
         if (item.location) {
              const temp = item.location.split(',');
+             this.activeIndex = index;
              const loacation = await coordtransform.gcj02towgs84(temp[0], temp[1]);
              this.N1 = loacation[1].toFixed(this.toFixedNum);
              this.E1 = loacation[0].toFixed(this.toFixedNum);

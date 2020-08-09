@@ -1,18 +1,31 @@
 /**
  * 函数防抖( => void 无法拿到arguments )
  */
-export const debounce = function(fn: () => void, t: number = 0) {
-    let timer: number | undefined | null = null;
-    return function() {
-        // @ts-ignore
-        const context: any = this;
-        const args: any = arguments;
-        timer && clearTimeout(timer);
-        timer = setTimeout(function() {
-            fn.apply(context, args);
-        }, t);
+export function debounce(
+    cb: (...args: any[]) => void,
+    wait = 250,
+    immediate = false,
+): (...args: any[]) => void {
+    let timeout: ReturnType<typeof setTimeout> | null;
+
+    return (...args: any[]): void => {
+        if (timeout) {
+            clearTimeout(timeout);
+        }
+
+        timeout = setTimeout(() => {
+            timeout = null;
+
+            if (!immediate) {
+                cb(...args);
+            }
+        }, wait);
+
+        if (immediate && !timeout) {
+            cb(...args);
+        }
     };
-};
+}
 /**
  * jsonp搜索工具
  * @param url

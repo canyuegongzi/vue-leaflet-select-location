@@ -1,4 +1,5 @@
 ## 经纬度选择器
+[在线地址](http://canyuegongzi.xyz/vue-leaflet-location-select/) 
 ### 开始
 安装
 ```
@@ -34,6 +35,8 @@ components： { 'my-component': () => import('vue-leaflet-location-select')}
 | toFixedNum |Number  | 经纬度有效位 | 6  | 否 |
 | isInput |Boolean  | 是否显示输入框(特定场合只用定位功能) | true  | 否 |
 | disable |Boolean  | 组件禁用 | false  | 否 |
+| width |Number  | 组件宽度 | 320  | 否 |
+
 ### MapConfig
 ```
 mapCenter: Array<number | string>  = [30.257881, 120.195923]; // 地图默认中心点
@@ -46,11 +49,23 @@ searchConfigKey?: string = '9cb097cec23e465d5916ef63f23798db'; // 地图搜索�
 searchConfigUrl?: string = 'http://restapi.amap.com/v3/place/text';
 ```
 ### event
-暂无
+| 事件名 | 参数类型 | 描述 |
+| --- | --- | --- |
+| input | String[] | value修改 |
+
 ### method
-暂无
+| 事件名 | 参数类型 | 描述 |
+| --- | --- | --- |
+| clearValue | -- | 清楚value |
+| destroyMap | -- | 销毁地图 |
 ### slot
 暂无
-### 版本更迭
+
 ### 提示
 1. 组件内部集成leaflet.js，不建议使用全局注册，按需加载即可。
+2. 地图定位使用EPSG3857坐标。
+3. 组价基于elementui。
+
+### 版本更迭
+1. 数据流修改为双向绑定；
+2. 添加搜索列表功能

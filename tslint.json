@@ -5,9 +5,7 @@
     ],
     "linterOptions": {
         "exclude": [
-            "node_modules/**",
-            "src/packages1/**",
-            "src/packages1/selectLocation/SelectLocation.vue"
+            "node_modules/**"
         ]
     },
     "rules": {

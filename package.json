@@ -1,9 +1,12 @@
 {
     "name": "vue-leaflet-location-select",
-    "version": "0.2.7",
+    "version": "0.2.8",
     "main": "library/vue-leaflet-location-select.umd.min.js",
-    "author": "Marvin",
+    "author": "Marvin <yongfeide123@gmail.com>",
     "license": "MIT",
+    "publishConfig": {
+        "tag": "latest"
+    },
     "description": "an Component of Longitude and latitude of Location based on Vue.js",
     "scripts": {
         "serve": "vue-cli-service serve",
@@ -64,7 +67,7 @@
         "vue": "^2.6.11",
         "vue-class-component": "^7.2.3",
         "vue-jsonp": "^0.1.8",
-        "vue-leaflet-location-select": "^0.2.7",
+        "vue-leaflet-location-select": "^0.2.8",
         "vue-loader": "^15.9.3",
         "vue-property-decorator": "^8.4.2",
         "vue-router": "^3.2.0",

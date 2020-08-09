@@ -2,8 +2,8 @@
     div(class="result-list-wrapper" ref="resultWrapper")
         el-card(class="box-card" v-show="result.length > 0 &&! isNoData")
             el-scrollbar(class="yf_scroll-list" style="height:250px;")
-                .item(v-for="(item) in addressList " :key="item.index" @click="setLocationItem(item)")
-                    span(class="el-icon-location-information yf_icon")
+                .item(v-for="(item, index) in addressList " :key="item.index" @click="setLocationItem(item, index)")
+                    span(class="el-icon-location-information yf_icon" :style="{color: index === activeIndex ? '#3385ff' : '#ff0000'}")
                     span.yf_label()
                         p(:title="item.name") {{item.name}}
                         p.detail(:title="item.detailAddress") {{item.detailAddress}}
@@ -24,10 +24,10 @@ export default class SearchList extends Vue {
     @Prop({ default: 0 }) private width!: number;
     @Prop({ default: 0 }) private height!: number;
     @Prop({ default: false }) private isNoData!: boolean;
-    private activeIndex: number = 0;
+    @Prop({ default: -1 }) private activeIndex!: number;
     @Emit('setLocationItem')
-    private setLocationItem(item: MapSearchPoisItem) {
-        return item;
+    private setLocationItem(item: MapSearchPoisItem, index: number): {item: MapSearchPoisItem, index: number} {
+        return {item, index};
     }
     get addressList(): MapSearchPoisItem[] {
         return this.result.map((item: MapSearchPoisItem) => {

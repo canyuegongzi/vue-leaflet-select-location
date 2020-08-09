@@ -1,5 +1,5 @@
 export class MapSearchPoisItem {
-    public address?: string = ''; // 阡陌路459号
+    public address?: string = '';
     public adname?: string = '';  // 滨江区
     // tslint:disable-next-line:variable-name
     public biz_ext?: any; // {rating: [], cost: []}
