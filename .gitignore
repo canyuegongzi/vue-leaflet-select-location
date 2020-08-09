@@ -2,6 +2,7 @@
 node_modules
 /dist
 /library
+/library
 # local env files
 .env.local
 .env.*.local
