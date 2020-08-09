@@ -149,6 +149,7 @@ export default class SelectLocation extends Vue {
             this.marker = null;
             this.N = this.N1 = this.N2 = '';
             this.E = this.E1 = this.E2 = '';
+            this.activeIndex = -1;
             this.sync();
         }
     }
@@ -158,6 +159,7 @@ export default class SelectLocation extends Vue {
     public clearValue() {
         this.N = this.N1 = this.N2 = '';
         this.E = this.E1 = this.E2 = '';
+        this.activeIndex = -1;
     }
     /**
      * 组件配置初始化
@@ -285,6 +287,7 @@ export default class SelectLocation extends Vue {
      */
     private async getLocationQuery(): Promise<any> {
         let positionList: MapSearchPoisItem[] = [];
+        this.activeIndex = -1;
         const res: any = await jsonpHttp(
             this.componentConfig.searchConfigUrl,
             { keywords: this.searchQuery, key: this.componentConfig.searchConfigKey});
