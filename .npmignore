@@ -3,6 +3,7 @@
 *.yml
 build/
 node_modules/
+src/**
 src/assets
 src/npm
 src/router
