@@ -8474,10 +8474,10 @@ vue-jsonp@^0.1.8:
   resolved "https://registry.yarnpkg.com/vue-jsonp/-/vue-jsonp-0.1.8.tgz#2cec054b0aca5a9c7de0146b16b2acbeec2d73a7"
   integrity sha512-ebxvjHl5D7bv5Z7SeRzZUAPOSRMx+RiAeej7h6dPpbtk8MVz/b3n9fOZ8AAVmakb1pe36e+qG0J+K49a3LfpKA==
 
-vue-leaflet-location-select@^0.2.1:
-  version "0.2.1"
-  resolved "https://registry.yarnpkg.com/vue-leaflet-location-select/-/vue-leaflet-location-select-0.2.1.tgz#78606647b9a8b7bc1bf19f18099c8cd3b53f063e"
-  integrity sha512-vl/A/bSYvddZKpPMk+/1oWy6N4lh+hbN5FAGuquiL5gXesiSJVhXYCAbGPdoNm4LOlWEJHMkDRfkNkIEeLUDrQ==
+vue-leaflet-location-select@^0.2.9:
+  version "0.2.9"
+  resolved "https://registry.npm.taobao.org/vue-leaflet-location-select/download/vue-leaflet-location-select-0.2.9.tgz#d45db7e7153007a3d0729eacf2f6f755dedf9c81"
+  integrity sha1-1F235xUwB6PQcp6s8vb3Vd7fnIE=
 
 vue-loader@^15.9.2, vue-loader@^15.9.3:
   version "15.9.3"

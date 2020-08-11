@@ -34,7 +34,7 @@ module.exports = {
             }
         },
         plugins: [
-            new BundleAnalyzerPlugin()
+            // new BundleAnalyzerPlugin()
             /*new webpack.DllReferencePlugin({
                 context: process.cwd(),
                 manifest: require('./public/vendor/vendor-manifest.json')

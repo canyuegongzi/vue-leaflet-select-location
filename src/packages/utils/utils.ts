@@ -1,4 +1,32 @@
 /**
+ * 函数防抖( => void 无法拿到arguments )
+ */
+export function debounce(
+    cb: (...args: any[]) => void,
+    wait = 250,
+    immediate = false,
+): (...args: any[]) => void {
+    let timeout: ReturnType<typeof setTimeout> | null;
+
+    return (...args: any[]): void => {
+        if (timeout) {
+            clearTimeout(timeout);
+        }
+
+        timeout = setTimeout(() => {
+            timeout = null;
+
+            if (!immediate) {
+                cb(...args);
+            }
+        }, wait);
+
+        if (immediate && !timeout) {
+            cb(...args);
+        }
+    };
+}
+/**
  * jsonp搜索工具
  * @param url
  * @param params
@@ -25,3 +53,4 @@ export const jsonpHttp = (url, params= {}) => {
         }
     }));
 };
+

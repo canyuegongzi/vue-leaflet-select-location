@@ -5,9 +5,7 @@
     ],
     "linterOptions": {
         "exclude": [
-            "node_modules/**",
-            "src/packages1/**",
-            "src/packages1/selectLocation/SelectLocation.vue"
+            "node_modules/**"
         ]
     },
     "rules": {
@@ -25,6 +23,7 @@
         "jsdoc-format": false,
         "camelcase": false,
         "triple-equals": false,
-        "no-unused-expression": false
+        "no-unused-expression": false,
+        "only-arrow-functions": false
     }
 }
