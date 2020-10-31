@@ -260,6 +260,7 @@ export default class SelectLocation extends Vue {
      * 节流触发搜索
      */
     private searchLocation(): void {
+        this.activeIndex = -1;
         if (this.searchQuery) {
             debounce(this.getLocationQuery, 250)();
         }
@@ -287,7 +288,6 @@ export default class SelectLocation extends Vue {
      */
     private async getLocationQuery(): Promise<any> {
         let positionList: MapSearchPoisItem[] = [];
-        this.activeIndex = -1;
         const res: any = await jsonpHttp(
             this.componentConfig.searchConfigUrl,
             { keywords: this.searchQuery, key: this.componentConfig.searchConfigKey});
