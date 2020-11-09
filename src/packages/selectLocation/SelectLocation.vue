@@ -8,11 +8,13 @@
         i(class="zmdi zmdi-zmdi-pin el-icon-location map-icon " @click="openMapDialog" v-if="!disable")
         .selct-dialog
             el-dialog(size="mini" :visible.sync="dialogVisible" custom-class='yf_map-dialog-select' :lock-scroll="true" id="mapEditContainer" @close="closeMapSelect" :width="dialogWidth")
-                span(slot="title") 请在地图上单击选择坐标点
+                span(slot="title") {{title}}
                 div(:id="mapId" class="map-box")
                     .mapTip
                         .text 经度：{{E1}}
                         .text 纬度：{{N1}}
+                    .custom-content"(v-if="$slots.customContent")
+                        slot(name="customContent")
                 div(class="map-search" style="width: 200px" v-if="componentConfig.isSearch")
                     el-input(v-model="searchQuery" clearable placeholder="请输入关键词搜索" @blur="searchBlur" @clear="clearAddressList" @keyup.enter.native="searchLocation" size="mini" suffix-icon="el-icon-search")
                 div(class="map-search-list" style="width: 200px")
@@ -45,6 +47,9 @@ export default class SelectLocation extends Vue {
     @Prop({ default: true }) private isInput: boolean | undefined;
     @Prop({ default: false }) private disable: boolean | undefined;
     @Prop({ default: false }) private isClear: boolean | undefined;
+    @Prop({ default: true }) private isMarker: boolean | undefined;
+    @Prop({ default: '请在地图上单击选择坐标点' }) private title: String | undefined;
+    
     private activeIndex: number = -1;
     get form() {
         return {
@@ -217,6 +222,7 @@ export default class SelectLocation extends Vue {
                 });
                 this.map.on("zoomend", (e: any) => {
                     console.log(e.target.getZoom());
+                    this.zoomChange(e.target.getZoom());
                 });
             }
             this.mapOnloadView();
@@ -340,6 +346,9 @@ export default class SelectLocation extends Vue {
      * 绘制地图标记
      */
     private setMarker(): void | boolean {
+        if(!this.isMarker) {
+            return;
+        }
         if (!this.marker) {
             this.marker = L.marker([this.N1, this.E1], {
                 icon: new L.icon({
@@ -463,6 +472,14 @@ export default class SelectLocation extends Vue {
         if (this.E != this.nullValueStr || this.N != this.nullValueStr) {
             return [this.N, this.E];
         }
+    }
+    /**
+     * 缩放级别修改
+     * @param val
+     */
+    @Emit('zoomChange')
+    zoomChange(val) {
+        return val;
     }
     private created() {
         this.initConfig();
