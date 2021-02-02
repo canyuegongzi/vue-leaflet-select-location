@@ -1,6 +1,6 @@
 {
     "name": "vue-leaflet-location-select",
-    "version": "0.3.2",
+    "version": "0.3.4",
     "main": "library/vue-leaflet-location-select.umd.min.js",
     "author": "Marvin <yongfeide123@gmail.com>",
     "license": "MIT",

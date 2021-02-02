@@ -13,7 +13,7 @@
                     .mapTip
                         .text 经度：{{E1}}
                         .text 纬度：{{N1}}
-                    .custom-content"(v-if="$slots.customContent")
+                    .custom-content(v-if="$slots.customContent")
                         slot(name="customContent")
                 div(class="map-search" style="width: 200px" v-if="componentConfig.isSearch")
                     el-input(v-model="searchQuery" clearable placeholder="请输入关键词搜索" @blur="searchBlur" @clear="clearAddressList" @keyup.enter.native="searchLocation" size="mini" suffix-icon="el-icon-search")
@@ -28,7 +28,7 @@ import "leaflet/dist/leaflet.css";
 import { Vue, Prop, Watch, Emit, Component } from "vue-property-decorator";
 import { MapConfig } from "../types/MapConfig";
 import {debounce, jsonpHttp} from '../utils/utils';
-import {MapSearchPoisItem} from '../types/MapSearchPoisItem';
+import { MapSearchPoisItem} from '../types/MapSearchPoisItem';
 import SearchList from '../searchList/SearchList.vue';
 import * as coordtransform from "coordtransform";
 import L from "leaflet";
@@ -48,8 +48,8 @@ export default class SelectLocation extends Vue {
     @Prop({ default: false }) private disable: boolean | undefined;
     @Prop({ default: false }) private isClear: boolean | undefined;
     @Prop({ default: true }) private isMarker: boolean | undefined;
-    @Prop({ default: '请在地图上单击选择坐标点' }) private title: String | undefined;
-    
+    @Prop({ default: '请在地图上单击选择坐标点' }) private title: string | undefined;
+    @Prop({ default: undefined }) private customSearchFunction: any | undefined;
     private activeIndex: number = -1;
     get form() {
         return {
@@ -294,14 +294,41 @@ export default class SelectLocation extends Vue {
      */
     private async getLocationQuery(): Promise<any> {
         let positionList: MapSearchPoisItem[] = [];
+        console.log(this.customSearchFunction);
+        // 存在自定义搜索函数调用自定义搜索函数
+        if (this.customSearchFunction) {
+            const list: MapSearchPoisItem[]  =  await this.customSearchFunction(this.searchQuery);
+            if (Array.isArray(list)) {
+                this.positionList = list;
+            }
+            this.searchIsNoData = this.positionList.length === 0;
+            return;
+        }
         const res: any = await jsonpHttp(
             this.componentConfig.searchConfigUrl,
             { keywords: this.searchQuery, key: this.componentConfig.searchConfigKey});
         if (res.info == 'OK') {
             positionList = res.pois;
         }
-        this.positionList = positionList;
+        this.positionList = positionList.map((item: MapSearchPoisItem) => {
+            return {
+                detailAddress: this.renderDetailAddress(item),
+                ...item,
+            };
+        });
         this.searchIsNoData = this.positionList.length === 0;
+    }
+    /**
+     * 渲染详细地址
+     * @param row
+     */
+    private renderDetailAddress(row: MapSearchPoisItem): string {
+        let str: string = '';
+        str += row.pname ? row.pname : '';
+        str += row.cityname ? row.cityname : '';
+        str += row.adname ? row.adname : '';
+        str += row.address ? row.address : '';
+        return str;
     }
     /**
      * 定位当前选中的地址
@@ -327,6 +354,7 @@ export default class SelectLocation extends Vue {
     private cancleFun(): void {
         this.dialogVisible = false;
         this.closeMapSelect();
+        this.activeIndex = -1;
     }
     /**
      * 定位点确认修改
@@ -346,9 +374,6 @@ export default class SelectLocation extends Vue {
      * 绘制地图标记
      */
     private setMarker(): void | boolean {
-        if(!this.isMarker) {
-            return;
-        }
         if (!this.marker) {
             this.marker = L.marker([this.N1, this.E1], {
                 icon: new L.icon({
@@ -478,7 +503,7 @@ export default class SelectLocation extends Vue {
      * @param val
      */
     @Emit('zoomChange')
-    zoomChange(val) {
+    private zoomChange(val) {
         return val;
     }
     private created() {

@@ -36,7 +36,14 @@ components： { 'my-component': () => import('vue-leaflet-location-select')}
 | isInput |Boolean  | 是否显示输入框(特定场合只用定位功能) | true  | 否 |
 | disable |Boolean  | 组件禁用 | false  | 否 |
 | width |Number  | 组件宽度 | 320  | 否 |
+| customSearchFunction |() => void  | 自定义搜索函数(返回数据必须是BaseLocation类型数组) | (searchStr):BaseLocation[] => {return []}  | 否 |
 
+### BaseLocation
+```
+location: string = ''; // 具体位置经度在前， 维度在后 "120.22132,30.207384"
+detailAddress?: string = ""; // 拼接出的详细地址
+name?: string = ""; // 聚光中心
+```
 ### MapConfig
 ```
 mapCenter: Array<number | string>  = [30.257881, 120.195923]; // 地图默认中心点
@@ -59,7 +66,10 @@ searchConfigUrl?: string = 'http://restapi.amap.com/v3/place/text';
 | clearValue | -- | 清楚value |
 | destroyMap | -- | 销毁地图 |
 ### slot
-暂无
+| 名称 | 描述 |
+| --- | --- |
+| customContent |地图自定义内容 |
+
 
 ### 提示
 1. 组件内部集成leaflet.js，不建议使用全局注册，按需加载即可。

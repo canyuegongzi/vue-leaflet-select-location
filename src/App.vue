@@ -9,9 +9,9 @@
 </template>
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
-import SelectLocation from "vue-leaflet-location-select";
-import "vue-leaflet-location-select/library/vue-leaflet-location-select.css";
-// import SelectLocation from "./packages/selectLocation/SelectLocation.vue";
+// import SelectLocation from "vue-leaflet-location-select";
+// import "vue-leaflet-location-select/library/vue-leaflet-location-select.css";
+import SelectLocation from "./packages/selectLocation/SelectLocation.vue";
 @Component({
     components: {
         'select-location': SelectLocation,
@@ -33,6 +33,20 @@ export default class App extends Vue {
     private created() {
         console.log(SelectLocation);
         console.log("组件初始化");
+    }
+
+    /**
+     * 自定义搜素
+     * @param val
+     */
+    private customSearchFunction(val) {
+        return [
+            {
+                location: '120.22132,30.207384',
+                detailAddress: '拼接出的详细地址',
+                name: '聚光中心',
+            },
+        ];
     }
 }
 </script>

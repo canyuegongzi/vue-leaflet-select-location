@@ -6,7 +6,7 @@ const VueLoaderPlugin = require('vue-loader/lib/plugin');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 module.exports = {
     mode: 'production ',
-    entry: "./src/packages/index.js",
+    entry: "./src/packages/index.ts",
     output: {
         path: path.resolve(__dirname, './library'),
         filename: "vueLeafletLocationSelect.min.js",

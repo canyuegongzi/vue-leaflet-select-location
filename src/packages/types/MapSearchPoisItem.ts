@@ -1,4 +1,9 @@
-export class MapSearchPoisItem {
+/**
+ * 点位信息
+ */
+import {BaseLocation} from '@/packages/types/BaseLocation';
+
+export class MapSearchPoisItem extends BaseLocation {
     public address?: string = '';
     public adname?: string = '';  // 滨江区
     // tslint:disable-next-line:variable-name
@@ -10,8 +15,6 @@ export class MapSearchPoisItem {
     public distance?: [] = [];
     public id?: string = "";
     public importance?: [] = [];
-    public location: string = ''; //  "120.22132,30.207384"
-    public name?: string = ""; // 聚光中心
     public parent?: [] = [];
     public photos?: [] = [];
     public pname?: string = ""; // 浙江省
@@ -21,5 +24,4 @@ export class MapSearchPoisItem {
     public tel?: string = ''; // "0571-85012001"
     public type?: string = '';  // "商务住宅;楼宇;商务写字楼"
     public typecode?: string = "";
-    public detailAddress?: string = ""; // 拼接出的详细地址
 }

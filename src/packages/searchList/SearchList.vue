@@ -30,87 +30,9 @@ export default class SearchList extends Vue {
         return {item, index};
     }
     get addressList(): MapSearchPoisItem[] {
-        return this.result.map((item: MapSearchPoisItem) => {
-            return {
-                detailAddress: this.renderDetailAddress(item),
-                ...item,
-            };
-        });
-    }
-
-    /**
-     * 渲染详细地址
-     * @param row
-     */
-    private renderDetailAddress(row: MapSearchPoisItem): string {
-        let str: string = '';
-        str += row.pname ? row.pname : '';
-        str += row.cityname ? row.cityname : '';
-        str += row.adname ? row.adname : '';
-        str += row.address ? row.address : '';
-        return str;
+        return this.result;
     }
 }
 </script>
 
-<style scoped lang="stylus">
- .box-card
-     >>>.el-card__body
-            padding 8px 0 !important
-    .item
-        border-bottom: 1px solid #EBEEF5
-        cursor pointer
-        padding 0 8px
-        box-sizing border-box
-        overflow hidden
-        text-overflow ellipsis
-        white-space normal
-        word-break break-all
-        color #606266
-        display flex
-        font-size: 12px
-        justify-content space-around
-        &:hover
-             background #F5F7FA
-        .yf_label
-            display inline-block
-            width 150px
-            line-height 28px
-            color #3385ff
-            p
-                margin 0
-                line-height 14px
-                overflow hidden
-                text-overflow ellipsis
-                white-space nowrap
-                padding 2px 0 2px 0
-            .detail
-                 font-size 10px
-                 color #606266
-        .yf_icon
-            display flex
-            align-items center
-            width 20px
-            font-size 18px
-            color #ff0000
-    .yf_scroll-list
-        >>>.el-scrollbar__wrap
-                overflow-x hidden
-    .no-search-data
-         border-bottom 1px solid #ebeef5
-         cursor pointer
-         padding 0 8px
-         box-sizing border-box
-         overflow hidden
-         text-overflow ellipsis
-         white-space: normal
-         word-break break-all
-         color #606266
-         display flex
-         font-size 12px
-         justify-content space-around
-         background #ffff
-         margin 0
-         line-height: 48px
-         border-radius 4px
-</style>
+<style scoped lang="stylus" src="./index.styl"></style>
